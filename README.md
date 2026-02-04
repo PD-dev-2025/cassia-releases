@@ -34,3 +34,57 @@ Release assets are provided under the license specified in each asset or in the 
 ---
 
 Quick link: https://github.com/PD-dev-2025/cassia-releases/releases
+
+## Gateway Dashboard Installation
+# 1. Set Permissions
+Ensure the binary is executable and the configuration file is initialized.
+
+chmod +x /home/mpr/gateway-dashboard
+
+cp /home/mpr/config.json.example /home/mpr/config.json
+
+2. Create Systemd Service Unit
+Create the service configuration file at /etc/systemd/system/gateway.service:
+
+#
+[Unit]
+
+Description=ESP32 BLE Gateway Dashboard
+
+After=network.target
+
+[Service]
+
+Type=simple
+
+User=mpr
+
+WorkingDirectory=/home/mpr
+
+ExecStart=/home/mpr/gateway-dashboard
+
+Restart=always
+
+RestartSec=5
+
+[Install]
+
+WantedBy=multi-user.target
+
+#
+
+3. Initialize Service
+Reload the system manager, enable the service for boot-start, and initiate the process.
+
+Bash
+sudo systemctl daemon-reload
+sudo systemctl enable gateway.service
+sudo systemctl start gateway.service
+4. Management Commands
+Monitor the process status or view real-time application logs.
+
+# Check status
+sudo systemctl status gateway.service
+
+# View live logs
+sudo journalctl -u gateway.service -f
